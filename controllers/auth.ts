@@ -93,7 +93,22 @@ export async function register(
       return;
     }
 
-    // TODO: Check if user is unique.
+    const userByUsernameOrEmail = await User.exists({
+      $or: [
+        {
+          username: { $regex: username, $options: 'i' },
+        },
+        { email: { $regex: email, $options: 'i' } },
+      ],
+    }).exec();
+
+    if (userByUsernameOrEmail) {
+      res.json({
+        success: false,
+        message: 'Username or email already taken',
+      });
+      return;
+    }
 
     const hashedPassword = bcryptjs.hashSync(password, process.env.SALT);
     const user = new User({ username, email, password: hashedPassword });
