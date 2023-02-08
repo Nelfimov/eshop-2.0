@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import cors from 'cors';
 import { HttpException } from './@types/common/index.js';
-import { passport, connectToMongo } from './config/index.js';
+import { passport, connectToMongo } from './configs/index.js';
 
 dotenv.config();
 
