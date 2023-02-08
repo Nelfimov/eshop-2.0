@@ -10,6 +10,19 @@ ProductRouter.post(
   '/',
   passport.authenticate('jwt', { session: false, failWithError: true }),
   isUserAdmin,
-  ProductsController.createNew
+  ProductsController.create
 );
+
 ProductRouter.get('/:id', ProductsController.getById);
+ProductRouter.patch(
+  '/:id',
+  passport.authenticate('jwt', { session: false, failWithError: true }),
+  isUserAdmin,
+  ProductsController.updateOne
+);
+ProductRouter.delete(
+  '/:id',
+  passport.authenticate('jwt', { session: false, failWithError: true }),
+  isUserAdmin,
+  ProductsController.deleteOne
+);
