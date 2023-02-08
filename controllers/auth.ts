@@ -94,6 +94,18 @@ export async function register(
     }
 
     // TODO: Check if user is unique.
+
+    const hashedPassword = bcryptjs.hashSync(password, process.env.SALT);
+    const user = new User({ username, email, password: hashedPassword });
+    if (secret === process.env.ADMIN_SECRET) {
+      user.isAdmin = true;
+    }
+    await user.save();
+    const token = await issueToken(user);
+    res.json({
+      success: true,
+      token,
+    });
   } catch (err) {
     console.error(err);
     next(err);
