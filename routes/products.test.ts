@@ -4,36 +4,36 @@ import { Product } from '../models/product.js';
 import { startMongoMemory, stopMongoMemoryServer } from '../configs/index.js';
 import { Product as IProduct } from '../@types/common/product.js';
 import app from '../app.js';
-import { User } from '../models/user.js';
 
 describe('GET /', () => {
+  const products: IProduct[] = [
+    {
+      name: 'Macbook',
+      quantityOnStock: 1,
+      createdAt: new Date(),
+      price: 100,
+      titleImage: 'default',
+      updatedAt: new Date(),
+    },
+    {
+      name: 'iPhone',
+      quantityOnStock: 15,
+      createdAt: new Date(),
+      price: 200,
+      titleImage: 'default',
+      updatedAt: new Date(),
+    },
+    {
+      name: 'iPad',
+      quantityOnStock: 10,
+      createdAt: new Date(),
+      price: 400,
+      titleImage: 'default',
+      updatedAt: new Date(),
+    },
+  ];
+
   beforeAll(async () => {
-    const products: IProduct[] = [
-      {
-        name: 'Macbook',
-        quantityOnStock: 1,
-        createdAt: new Date(),
-        price: 100,
-        titleImage: 'default',
-        updatedAt: new Date(),
-      },
-      {
-        name: 'iPhone',
-        quantityOnStock: 15,
-        createdAt: new Date(),
-        price: 200,
-        titleImage: 'default',
-        updatedAt: new Date(),
-      },
-      {
-        name: 'iPad',
-        quantityOnStock: 10,
-        createdAt: new Date(),
-        price: 400,
-        titleImage: 'default',
-        updatedAt: new Date(),
-      },
-    ];
     await startMongoMemory();
     products.forEach(async (product) => {
       const result = new Product(product);
@@ -59,36 +59,47 @@ describe('GET /', () => {
 });
 
 describe('POST', () => {
-  let user;
-  let admin;
+  let user: request.Response;
+  let admin: request.Response;
 
   beforeAll(async () => {
     await startMongoMemory();
-    admin = new User({
+    admin = await request(app).post('/auth/register').send({
       username: 'example1',
       email: 'example1@example.com',
-      isAdmin: true,
       password: '123',
+      secret: process.env.ADMIN_SECRET,
     });
-    await admin.save();
-    user = new User({
+    user = await request(app).post('/auth/register').send({
       username: 'example2',
       email: 'example2@example.com',
-      isAdmin: true,
       password: '123',
     });
-    await user.save();
   });
 
   it('/products', async () => {
-    const response = await (
-      await request(app).post('/products').set('Authorization', token)
-    ).body({
-      name: 'Watch',
-      quantityOnStock: 1,
-      price: 300,
-      titleImage: 'default',
-    });
-    expect(response.body.success).toBeTruthy();
+    const userResponse = await request(app)
+      .post('/products')
+      .set('Authorization', user.body.token)
+      .send({
+        name: 'Watch',
+        quantityOnStock: 1,
+        price: 300,
+        titleImage: 'default',
+      });
+    expect(userResponse.body.success).toBeFalsy();
+
+    const adminResponse = await request(app)
+      .post('/products')
+      .set('Authorization', admin.body.token)
+      .send({
+        name: 'Watch',
+        quantityOnStock: 1,
+        price: 300,
+        titleImage: 'default',
+      });
+    expect(adminResponse.body.success).toBeTruthy();
+    const products = await Product.find({}).lean().exec();
+    expect(products.length).toBe(1);
   });
 });

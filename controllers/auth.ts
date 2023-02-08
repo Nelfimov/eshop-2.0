@@ -48,7 +48,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     const token = await issueToken(user);
     res.json({
       success: true,
-      token,
+      ...token,
     });
   } catch (err) {
     console.error(err);
@@ -88,7 +88,7 @@ export async function register(
     if (!email) {
       res.json({
         success: false,
-        message: 'Nedd to provide unique email',
+        message: 'Need to provide unique email',
       });
       return;
     }
@@ -110,16 +110,26 @@ export async function register(
       return;
     }
 
-    const hashedPassword = bcryptjs.hashSync(password, process.env.SALT);
-    const user = new User({ username, email, password: hashedPassword });
+    const hashedPassword = bcryptjs.hashSync(
+      password,
+      parseInt(process.env.SALT as string)
+    );
+    let user;
     if (secret === process.env.ADMIN_SECRET) {
-      user.isAdmin = true;
+      user = new User({
+        username,
+        email,
+        password: hashedPassword,
+        isAdmin: true,
+      });
+    } else {
+      user = new User({ username, email, password: hashedPassword });
     }
     await user.save();
     const token = await issueToken(user);
     res.json({
       success: true,
-      token,
+      ...token,
     });
   } catch (err) {
     console.error(err);

@@ -26,3 +26,20 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
     next(err);
   }
 }
+
+export async function createNew(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const product = new Product({ ...req.body });
+    await product.save();
+    res.json({
+      success: true,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+}

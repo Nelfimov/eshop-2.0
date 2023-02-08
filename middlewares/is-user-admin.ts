@@ -15,7 +15,7 @@ export async function isUserAdmin(
   }
 
   const user = await User.findById(req.user._id).exec();
-  if (!user) {
+  if (!user?.isAdmin) {
     res.status(401).json({
       success: false,
       message: 'Admin only access',
