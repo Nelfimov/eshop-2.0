@@ -11,7 +11,11 @@ const ProductSchema = new Schema({
 });
 
 ProductSchema.virtual('totalPrice').get(function () {
-  return this.price + this.deliveryPrice ?? 0 - this.discount;
+  return this.price + (this.deliveryPrice ?? 0) - (this.discount ?? 0);
+});
+
+ProductSchema.method('decreaseStock', function (number: number) {
+  return this.quantityOnStock - number;
 });
 
 const Product = model('Product', ProductSchema);
