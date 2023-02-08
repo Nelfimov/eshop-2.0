@@ -6,7 +6,7 @@ import path from 'path';
 import cors from 'cors';
 import { HttpException } from './@types/common/index.js';
 import { passport } from './configs/index.js';
-import { ProductRouter } from './routes/index.js';
+import { AuthRouter, ProductRouter } from './routes/index.js';
 
 dotenv.config();
 
@@ -21,6 +21,7 @@ app.use(urlencoded({ extended: false }));
 app.use(cors());
 app.use('/statics', express.static(path.join(__dirname, 'statics')));
 
+app.use('/auth', AuthRouter);
 app.use('/products', ProductRouter);
 
 app.use((req, res, next) => next(createError(404)));
