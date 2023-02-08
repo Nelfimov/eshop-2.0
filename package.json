@@ -9,7 +9,7 @@
     "start:watch": "nodemon --ignore ./node_modules --watch './**/*.ts' --exec 'node --experimental-specifier-resolution=node --loader ts-node/esm' ./bin/www.ts",
     "test": "NODE_OPTIONS=--experimental-vm-modules vitest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules vitest --watch",
-    "coverage": "NODE_OPTIONS=--experimental-vm-modules vitest run coverage",
+    "coverage": "NODE_OPTIONS=--experimental-vm-modules vitest run --coverage",
     "build": "tsc"
   },
   "repository": {
@@ -34,6 +34,7 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
+    "@vitest/coverage-c8": "^0.28.4",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-standard-with-typescript": "^34.0.0",

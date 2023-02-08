@@ -21,7 +21,7 @@ ProductSchema.virtual('totalPrice').get(function () {
 });
 
 ProductSchema.method('decreaseStock', function (number: number) {
-  return this.quantityOnStock - number;
+  return this.quantityOnStock - number < 0 ? 0 : this.quantityOnStock - number;
 });
 
 const Product = model('Product', ProductSchema);
