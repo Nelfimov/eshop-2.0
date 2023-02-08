@@ -6,6 +6,7 @@
 import app from '../app.js';
 import debugLib from 'debug';
 import { createServer } from 'http';
+import { connectToMongo } from '../configs/index.js';
 
 const debug = debugLib('eshop:server');
 
@@ -14,6 +15,8 @@ const debug = debugLib('eshop:server');
  */
 const port = normalizePort(process.env.PORT ?? '3000');
 app.set('port', port);
+
+await connectToMongo(process.env.MONGODB_URL);
 
 /**
  * Create HTTP server.

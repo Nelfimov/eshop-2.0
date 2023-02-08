@@ -5,13 +5,11 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import cors from 'cors';
 import { HttpException } from './@types/common/index.js';
-import { passport, connectToMongo } from './configs/index.js';
+import { passport } from './configs/index.js';
 
 dotenv.config();
 
 const app = express();
-
-await connectToMongo(process.env.MONGODB_URL);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
