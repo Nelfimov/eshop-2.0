@@ -27,7 +27,7 @@ app.use((req, res, next) => next(createError(404)));
 // @ts-expect-error: This is unknown error
 app.use(async (err: HttpException, req: Request, res: Response) => {
   res.status(err.status || 500);
-  console.log(err.message);
+  console.error(err.message);
   await res.json({ success: false, message: err.message });
 });
 

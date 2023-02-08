@@ -1,4 +1,7 @@
+import { ObjectId } from 'mongoose';
+
 export interface Product {
+  _id?: string | ObjectId;
   name: string;
   quantityOnStock: number;
   price: number;
