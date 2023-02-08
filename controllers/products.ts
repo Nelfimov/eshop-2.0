@@ -3,7 +3,7 @@ import { Product } from '../models/index.js';
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    const products = await Product.find().lean().exec();
+    const products = await Product.find({}).lean().exec();
     res.json({
       success: true,
       products,
