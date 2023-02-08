@@ -5,15 +5,19 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import cors from 'cors';
 import { HttpException } from './@types/common/index.js';
+import { passport, connectToMongo } from './config/index.js';
 
 dotenv.config();
 
 const app = express();
 
+await connectToMongo(process.env.MONGODB_URL);
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(json());
+app.use(passport.initialize());
 app.use(urlencoded({ extended: false }));
 app.use(cors());
 app.use('/statics', express.static(path.join(__dirname, 'statics')));
