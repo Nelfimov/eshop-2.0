@@ -22,17 +22,28 @@ describe('POST', () => {
     });
     expect(responseNoEmail.body.success).toBeFalsy();
 
-    const response = await request(app).post('/auth/register').send({
+    const response1 = await request(app).post('/auth/register').send({
       username: 'Example',
       email: 'example@example.com',
       password: '123',
     });
 
-    expect(response.body.success).toBeTruthy();
-    expect(response.body.token).toBeTruthy();
+    expect(response1.body.success).toBeTruthy();
+    expect(response1.body.token).toBeTruthy();
 
-    const users = await User.find({ username: 'Example' }).lean().exec();
-    expect(users.length).toBe(1);
+    const users1 = await User.find({ username: 'Example' }).lean().exec();
+    expect(users1.length).toBe(1);
+
+    const response2 = await request(app).post('/auth/register').send({
+      username: 'Example',
+      email: 'example@example.com',
+      password: '123',
+    });
+
+    expect(response2.body.success).toBeFalsy();
+
+    const users2 = await User.find({ username: 'Example' }).lean().exec();
+    expect(users2.length).toBe(1);
   });
 
   it('/auth/login', async () => {
