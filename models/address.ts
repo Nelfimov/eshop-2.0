@@ -1,7 +1,7 @@
 import { Schema, model, Types } from 'mongoose';
-import { Address as IAddress } from '../@types/common/address.js';
+import { Address } from '../@types/common/address.js';
 
-const AddressSchema = new Schema<IAddress>({
+const AddressSchema = new Schema<Address>({
   street: { type: String, required: true },
   city: { type: String, required: true },
   zip: { type: Number, required: true },

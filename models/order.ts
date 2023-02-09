@@ -1,6 +1,7 @@
 import { Schema, model, Types } from 'mongoose';
+import { Order } from '../@types/common/index.js';
 
-const OrderSchema = new Schema(
+const OrderSchema = new Schema<Order>(
   {
     user: { type: Types.ObjectId, required: true },
     isOrdered: { type: Boolean, default: false, required: true },

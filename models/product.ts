@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
+import { Product } from '../@types/common/product.js';
 
-const ProductSchema = new Schema(
+const ProductSchema = new Schema<Product>(
   {
     name: { type: String, required: true },
     quantityOnStock: { type: Number, required: true, default: 1 },
