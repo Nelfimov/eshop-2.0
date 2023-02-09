@@ -3,10 +3,9 @@ import request from 'supertest';
 import app from '../app.js';
 import { Address } from '../models/index.js';
 import { startMongoMemory, stopMongoMemoryServer } from '../configs/index.js';
-import { Address as IAddress } from '../@types/common/address.js';
 
 let user: request.Response;
-const address: IAddress = {
+const address = {
   street: 'Street',
   city: 'City',
   country: 'Country',

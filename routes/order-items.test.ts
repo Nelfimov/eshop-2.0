@@ -2,9 +2,10 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import request from 'supertest';
 import app from '../app.js';
 import { startMongoMemory } from '../configs/mongo-memory.js';
-import { Product } from '../@types/common/index.js';
+import { Product } from '../models/product.js';
+import { Order } from '../models/order.js';
 
-const products: Product[] = [
+const products = [
   {
     name: 'Macbook',
     quantityOnStock: 1,
@@ -36,6 +37,9 @@ describe('/products/:id/add', () => {
 
   beforeAll(async () => {
     startMongoMemory();
+    products.forEach(async (product) => {
+      await new Product(product).save();
+    });
     user = await request(app).post('/auth/register').send({
       username: 'user',
       email: 'user@example.com',
@@ -43,9 +47,23 @@ describe('/products/:id/add', () => {
     });
 
     it('POST authorized', async () => {
+      const product = await Product.findOne().lean().exec();
       const response = await request(app)
-        .post('/products/:id/add')
+        .post(`/products/${product?._id.toString()}/add`)
         .set('Authorization', user.body.token);
+      expect(response.body.success).toBeTruthy();
+      const order = await Order.find({ user: 'user' }).exec();
+      expect(order.length).toBe(1);
+    });
+
+    it('POST anon', async () => {
+      const product = await Product.findOne().lean().exec();
+      const response = await request(app).post(
+        `/products/${product?._id.toString()}/add`
+      );
+      expect(response.body.success).toBeTruthy();
+      const order = await Order.find({ user: response.body.user }).exec();
+      expect(order.length).toBe(1);
     });
   });
 });
