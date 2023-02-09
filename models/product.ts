@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { Product } from '../@types/common/product.js';
+import { Product as IProduct } from '../@types/common/product.js';
 
-const ProductSchema = new Schema<Product>(
+const ProductSchema = new Schema<IProduct>(
   {
     name: { type: String, required: true },
     quantityOnStock: { type: Number, required: true, default: 1 },
@@ -25,6 +25,6 @@ ProductSchema.method('decreaseStock', function (number: number) {
   return this.quantityOnStock - number < 0 ? 0 : this.quantityOnStock - number;
 });
 
-const Product = model('Product', ProductSchema);
+const Product = model<IProduct>('Product', ProductSchema);
 
 export { Product };

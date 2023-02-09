@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { User } from '../@types/common/user.js';
+import { User as IUser } from '../@types/common/user.js';
 
-const UserSchema = new Schema<User>(
+const UserSchema = new Schema<IUser>(
   {
     username: { type: String, required: true },
     email: { type: String, required: true },
@@ -13,6 +13,6 @@ const UserSchema = new Schema<User>(
   }
 );
 
-const User = model('User', UserSchema);
+const User = model<IUser>('User', UserSchema);
 
 export { User as User };

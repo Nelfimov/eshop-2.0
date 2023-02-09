@@ -1,12 +1,12 @@
-import { Schema, model, Types } from 'mongoose';
-import { OrderItem } from '../@types/common/index.js';
+import { Schema, model } from 'mongoose';
+import { OrderItem as IOrderItem } from '../@types/common/index.js';
 
-const OrderItemSchema = new Schema<OrderItem>({
-  product: { type: Types.ObjectId, ref: 'Product', required: true },
+const OrderItemSchema = new Schema<IOrderItem>({
+  product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
   quantity: { type: Number, required: true },
-  order: { type: Types.ObjectId, ref: 'Order' },
+  order: { type: Schema.Types.ObjectId, ref: 'Order' },
 });
 
-const OrderItem = model('OrderItem', OrderItemSchema);
+const OrderItem = model<IOrderItem>('OrderItem', OrderItemSchema);
 
 export { OrderItem };
