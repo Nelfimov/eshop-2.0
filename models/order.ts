@@ -6,7 +6,7 @@ const OrderSchema = new Schema<IOrder>(
     user: { type: Schema.Types.ObjectId, required: true },
     isOrdered: { type: Boolean, default: false, required: true },
     payment: { type: Schema.Types.ObjectId, ref: 'Payment' },
-    address: { type: Schema.Types.ObjectId, ref: 'Address', required: true },
+    address: { type: Schema.Types.ObjectId, ref: 'Address' },
   },
   {
     timestamps: true,

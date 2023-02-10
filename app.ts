@@ -6,7 +6,7 @@ import path from 'path';
 import cors from 'cors';
 import { HttpException } from './@types/common/index.js';
 import { passport } from './configs/index.js';
-import { AuthRouter, ProductRouter, AddressesRouter } from './routes/index.js';
+import * as router from './routes/index.js';
 
 dotenv.config();
 
@@ -21,9 +21,10 @@ app.use(urlencoded({ extended: false }));
 app.use(cors());
 app.use('/statics', express.static(path.join(__dirname, 'statics')));
 
-app.use('/auth', AuthRouter);
-app.use('/products', ProductRouter);
-app.use('/addresses', AddressesRouter);
+app.use('/auth', router.AuthRouter);
+app.use('/products', router.ProductRouter);
+app.use('/addresses', router.AddressesRouter);
+app.use('/orders', router.OrdersRouter);
 
 app.use((req, res, next) => next(createError(404)));
 // @ts-expect-error: This is unknown error
