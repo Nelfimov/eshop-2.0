@@ -29,6 +29,8 @@ customPassport.use(
           return;
         }
 
+        // TODO: добавить возможность создания пользователя если не найден.
+
         done(null, false);
       });
     }
