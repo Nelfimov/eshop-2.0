@@ -12,10 +12,7 @@ export function issueToken(user: HydratedDocument<User>) {
   };
 
   const secret = process.env.JWT_SECRET;
-  if (!secret) {
-    console.error('Secret cannot be read');
-    return;
-  }
+  if (!secret) throw new Error('Token cannot be read from file.');
 
   const signedToken = jwt.sign(payload, secret, { expiresIn });
 
