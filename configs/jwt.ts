@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
+import { HydratedDocument } from 'mongoose';
 import { User } from '../@types/common/index.js';
 
-export async function issueToken(user: User) {
+export function issueToken(user: HydratedDocument<User>) {
   const id = user._id;
   const expiresIn = '1d';
 

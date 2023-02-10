@@ -5,6 +5,7 @@ export interface User {
   email: string;
   password: string;
   isAdmin: boolean;
+  isAnon: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
