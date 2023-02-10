@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { passport } from '../configs/passport.js';
 import { ProductsController } from '../controllers/index.js';
 import { isUserAdmin } from '../middlewares/is-user-admin.js';
+import { OrderItemsRouter } from './order-items.js';
 
 export const ProductRouter = Router();
 
@@ -26,3 +27,4 @@ ProductRouter.delete(
   isUserAdmin,
   ProductsController.deleteOne
 );
+ProductRouter.use('/:id', OrderItemsRouter);

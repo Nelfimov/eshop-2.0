@@ -45,25 +45,25 @@ describe('/products/:id/add', () => {
       email: 'user@example.com',
       password: '123',
     });
+  });
 
-    it('POST authorized', async () => {
-      const product = await Product.findOne().lean().exec();
-      const response = await request(app)
-        .post(`/products/${product?._id.toString()}/add`)
-        .set('Authorization', user.body.token);
-      expect(response.body.success).toBeTruthy();
-      const order = await Order.find({ user: 'user' }).exec();
-      expect(order.length).toBe(1);
-    });
+  it('POST authorized', async () => {
+    const product = await Product.findOne().lean().exec();
+    const response = await request(app)
+      .post(`/products/${product?._id.toString()}/add`)
+      .set('Authorization', user.body.token);
+    expect(response.body.success).toBeTruthy();
+    const order = await Order.find({ user: 'user' }).exec();
+    expect(order.length).toBe(1);
+  });
 
-    it('POST anon', async () => {
-      const product = await Product.findOne().lean().exec();
-      const response = await request(app).post(
-        `/products/${product?._id.toString()}/add`
-      );
-      expect(response.body.success).toBeTruthy();
-      const order = await Order.find({ user: response.body.user }).exec();
-      expect(order.length).toBe(1);
-    });
+  it('POST anon', async () => {
+    const product = await Product.findOne().lean().exec();
+    const response = await request(app).post(
+      `/products/${product?._id.toString()}/add`
+    );
+    expect(response.body.success).toBeTruthy();
+    const order = await Order.find({ user: response.body.user }).exec();
+    expect(order.length).toBe(1);
   });
 });
