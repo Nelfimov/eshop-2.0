@@ -9,7 +9,7 @@ export const ProductRouter = Router();
 ProductRouter.get('/', ProductsController.getAll);
 ProductRouter.post(
   '/',
-  passport.authenticate('jwt', { session: false, failWithError: true }),
+  passport.authenticate('jwt', { session: false }),
   isUserAdmin,
   ProductsController.create
 );
@@ -17,13 +17,13 @@ ProductRouter.post(
 ProductRouter.get('/:id', ProductsController.getById);
 ProductRouter.patch(
   '/:id',
-  passport.authenticate('jwt', { session: false, failWithError: true }),
+  passport.authenticate('jwt', { session: false }),
   isUserAdmin,
   ProductsController.updateOne
 );
 ProductRouter.delete(
   '/:id',
-  passport.authenticate('jwt', { session: false, failWithError: true }),
+  passport.authenticate('jwt', { session: false }),
   isUserAdmin,
   ProductsController.deleteOne
 );
