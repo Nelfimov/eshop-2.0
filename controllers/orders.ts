@@ -3,6 +3,10 @@ import { Order } from '../models/order.js';
 import { issueToken } from '../configs/index.js';
 import { User } from '../models/user.js';
 
+/**
+ * Get `Order` with `isOrdered = false` for current user.
+ * If not present or user is not authorized, create new order.
+ */
 export async function getOrCreateOrder(
   req: Request,
   res: Response,
@@ -43,7 +47,6 @@ export async function getOrCreateOrder(
       order: newOrder,
     });
   } catch (err) {
-    console.error(err);
     next(err);
   }
 }
@@ -59,7 +62,33 @@ export async function deleteOrder(
       ? res.json({ success: true })
       : res.json({ success: false });
   } catch (err) {
-    console.error(err);
+    next(err);
+  }
+}
+
+/**
+ * Change order with admin priveleges.
+ */
+export async function changeOrder(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    let order = await Order.findById(req.params.id).exec();
+    order = { ...order, ...req.body };
+    if (!order) {
+      return res.json({
+        success: false,
+        message: 'Order is false',
+      });
+    }
+    await order?.save();
+    res.json({
+      success: true,
+      order,
+    });
+  } catch (err) {
     next(err);
   }
 }
