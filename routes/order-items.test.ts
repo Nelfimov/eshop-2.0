@@ -48,12 +48,12 @@ describe('/products/:id/add', () => {
   });
 
   it('POST authorized', async () => {
-    const product = await Product.findOne().lean().exec();
+    const product = await Product.findOne().exec();
     const response = await request(app)
       .post(`/products/${product?._id.toString()}/add`)
       .set('Authorization', user.body.token);
     expect(response.body.success).toBeTruthy();
-    const order = await Order.find({ user: 'user' }).exec();
+    const order = await Order.find({ 'user.username': 'user' }).exec();
     expect(order.length).toBe(1);
   });
 

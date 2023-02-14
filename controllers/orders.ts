@@ -1,50 +1,29 @@
 import { NextFunction, Response, Request } from 'express';
-import { Order } from '../models/order.js';
+import { Order, User } from '../models/index.js';
 import { issueToken } from '../configs/index.js';
-import { User } from '../models/user.js';
+import { getOrCreateOrder } from '../helpers/index.js';
 
 /**
  * Get `Order` with `isOrdered = false` for current user.
  * If not present or user is not authorized, create new order.
  */
-export async function getOrCreateOrder(
+export async function getOrder(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    if (!req.user) {
-      return res.json({
-        success: false,
-        message: 'user is not authorized',
-      });
-    }
+    if (!req.user) throw new Error('User is not authorized');
 
-    const order = await Order.findOne({ user: req.user._id }).exec();
-    if (order) {
-      return res.json({
-        success: true,
-        user: req.user,
-        order,
-      });
-    }
-
-    const newOrder = new Order({
-      user: req.user._id,
-    });
+    const order = await getOrCreateOrder(req.user._id.toString());
 
     const user = await User.findById(req.user._id).exec();
-    if (!user) {
-      return res.json({
-        success: false,
-        message: 'Something went wrong: user not found',
-      });
-    }
-    await newOrder.save();
+    if (!user) throw new Error('User not found');
+
     res.json({
       success: true,
       ...issueToken(user),
-      order: newOrder,
+      order,
     });
   } catch (err) {
     next(err);
