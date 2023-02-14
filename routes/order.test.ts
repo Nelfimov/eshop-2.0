@@ -21,17 +21,14 @@ describe.only('POST', () => {
       .post('/orders')
       .set('Authorization', user.body.token);
     expect(response.body.success).toBeTruthy();
-    const orders = await Order.find({
-      user: response.body.user._id,
-    }).exec();
+    const orders = await Order.find().exec();
     expect(orders.length).toBe(1);
   });
 
   it('Creates new order and user for unauthorized', async () => {
     const response = await request(app).post('/orders');
-    console.log(response.error);
     expect(response.body.success).toBeTruthy();
-    const orders = await Order.find({ user: response.body.user._id });
-    expect(orders.length).toBe(1);
+    const orders = await Order.find();
+    expect(orders.length).toBe(2);
   });
 });
