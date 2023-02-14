@@ -5,6 +5,9 @@ import { isUserAdmin } from '../middlewares/is-user-admin.js';
 
 export const OrdersRouter = Router();
 
+/**
+ * Checks if user is authorized. If not, creates new anon and assigns to req.user.
+ */
 OrdersRouter.post(
   '/',
   passport.authenticate('jwt-user', { session: false }),

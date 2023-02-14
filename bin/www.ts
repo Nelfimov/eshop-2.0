@@ -16,7 +16,11 @@ const debug = debugLib('eshop:server');
 const port = normalizePort(process.env.PORT ?? '3000');
 app.set('port', port);
 
-await connectToMongo(process.env.MONGODB_URL);
+if (typeof process.env.MONGODB_URL === 'string') {
+  await connectToMongo(process.env.MONGODB_URL);
+} else {
+  throw new Error('URL could not be read');
+}
 
 /**
  * Create HTTP server.
