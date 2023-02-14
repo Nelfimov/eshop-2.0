@@ -1,5 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 import { Order } from '../models/order.js';
+import { issueToken } from '../configs/index.js';
+import { User } from '../models/user.js';
 
 export async function getOrCreateOrder(
   req: Request,
@@ -26,10 +28,18 @@ export async function getOrCreateOrder(
     const newOrder = new Order({
       user: req.user._id,
     });
+
+    const user = await User.findById(req.user._id).exec();
+    if (!user) {
+      return res.json({
+        success: false,
+        message: 'Something went wrong: user not found',
+      });
+    }
     await newOrder.save();
     res.json({
       success: true,
-      user: req.user,
+      ...issueToken(user),
       order: newOrder,
     });
   } catch (err) {
