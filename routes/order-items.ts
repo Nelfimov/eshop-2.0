@@ -10,4 +10,4 @@ OrderItemsRouter.post(
   OrderItemsController.addToCart
 );
 // OrderItemsRouter.post('/remove', OrderItemsController.removeFromCart);
-// OrderItemsRouter.post('/substract', OrderItemsController.substractFromCart);
+OrderItemsRouter.post('/substract', OrderItemsController.substractFromCart);
