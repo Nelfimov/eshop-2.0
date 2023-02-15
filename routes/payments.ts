@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { passport } from '../configs/passport.js';
+import { passport } from '../configs/index.js';
 import { PaymentsController } from '../controllers/index.js';
-import { isUserAdmin } from '../middlewares/is-user-admin.js';
+import { isUserAdmin } from '../middlewares/index.js';
 
 export const PaymentsRouter = Router();
 
