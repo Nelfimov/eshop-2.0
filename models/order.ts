@@ -10,6 +10,7 @@ const OrderSchema = new Schema<IOrder>(
     status: {
       type: String,
       enum: ['draft', 'processing', 'delivery', 'finished'],
+      default: 'draft',
     },
   },
   {
