@@ -21,6 +21,11 @@ PaymentsRouter.get(
   passport.authenticate('jwt', { session: false }),
   PaymentsController.getPaymentById
 );
+PaymentsRouter.post(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  PaymentsController.getPaymentByIdAndAddToOrder
+);
 PaymentsRouter.patch(
   '/:id',
   passport.authenticate('jwt', { session: false }),

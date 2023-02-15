@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { Order } from '../models/order.js';
 import { Payment } from '../models/payment.js';
 
 export async function getAllPayments(
@@ -80,6 +81,50 @@ export async function deletePaymentById(
     res.json({
       success: result.acknowledged,
       deletedCount: result.deletedCount,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getPaymentByIdAndAddToOrder(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.json({
+        success: false,
+        message: 'User is not authorized',
+      });
+    }
+
+    const payment = await Payment.findById(req.params.id).lean().exec();
+    if (!payment) {
+      return res.json({
+        success: false,
+        message: 'No such payment found',
+      });
+    }
+
+    const order = await Order.findOne({
+      ...req.body,
+      isOrdered: false,
+      user: user._id,
+    }).exec();
+    if (!order) {
+      return res.json({
+        success: false,
+        message: 'No active order found',
+      });
+    }
+    order.payment = payment._id;
+    await order.save();
+    res.json({
+      success: true,
+      order,
     });
   } catch (err) {
     next(err);
