@@ -16,6 +16,11 @@ OrdersRouter.patch(
   isUserAdmin,
   OrdersController.changeOrder
 );
+OrdersRouter.patch(
+  '/:id/address',
+  passport.authenticate('jwt', { session: false }),
+  OrdersController.changeOrderAddress
+);
 OrdersRouter.delete(
   '/:id',
   passport.authenticate('jwt', { session: false }),
