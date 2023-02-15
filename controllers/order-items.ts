@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
+import { issueToken } from '../configs/jwt.js';
 import { getOrCreateOrder } from '../helpers/index.js';
-import { Order, OrderItem, Product } from '../models/index.js';
+import { Order, OrderItem, Product, User } from '../models/index.js';
 
 export async function addToCart(
   req: Request,
@@ -9,6 +10,7 @@ export async function addToCart(
 ) {
   try {
     const product = await Product.findById(req.params.id).exec();
+    const user = req.user;
     if (!product) {
       return res.json({
         success: false,
@@ -21,14 +23,15 @@ export async function addToCart(
         message: 'We do not have this item on stock any more',
       });
     }
-    if (!req.user) {
+    if (!user) {
       return res.json({
         success: false,
         message: 'User is not authorized',
       });
     }
 
-    const order = await getOrCreateOrder(req.user._id.toString());
+    const order = await getOrCreateOrder(user._id.toString());
+    const userQuery = await User.findById(user._id).exec();
     let orderItem = await OrderItem.findOne({
       product: product._id,
       order: order._id,
@@ -49,6 +52,8 @@ export async function addToCart(
       success: true,
       order,
       orderItem,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      ...issueToken(userQuery!),
     });
   } catch (err) {
     next(err);
