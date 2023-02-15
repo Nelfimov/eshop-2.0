@@ -21,6 +21,11 @@ OrdersRouter.patch(
   passport.authenticate('jwt', { session: false }),
   OrdersController.changeOrderAddress
 );
+OrdersRouter.patch(
+  '/:id/finished',
+  passport.authenticate('jwt', { session: false }),
+  OrdersController.changeOrderStatus
+);
 OrdersRouter.delete(
   '/:id',
   passport.authenticate('jwt', { session: false }),

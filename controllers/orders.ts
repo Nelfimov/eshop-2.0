@@ -100,3 +100,30 @@ export async function changeOrderAddress(
     next(err);
   }
 }
+
+/**
+ * Change order with admin priveleges.
+ */
+export async function changeOrderStatus(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const order = await Order.findById(req.params.id).exec();
+    if (!order) {
+      return res.json({
+        success: false,
+        message: 'Order is false',
+      });
+    }
+    order.isOrdered = !order.isOrdered;
+    await order.save();
+    res.json({
+      success: true,
+      order,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
