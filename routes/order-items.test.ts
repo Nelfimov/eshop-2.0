@@ -112,7 +112,6 @@ describe('/products/:id/remove', () => {
     const addToCart = await request(app).post(
       `/products/${product?._id.toString()}/add`
     );
-    console.log(addToCart.body);
     expect(addToCart.body.success).toBeTruthy();
     const response = await request(app)
       .post(`/products/${product?._id.toString()}/remove`)

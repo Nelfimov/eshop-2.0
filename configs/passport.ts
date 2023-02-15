@@ -39,7 +39,7 @@ customPassport.use(
 );
 
 customPassport.use(
-  'jwt-user',
+  'jwt-or-new',
   new JwtStrategy(
     {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

@@ -7,7 +7,7 @@ export const OrdersRouter = Router();
 
 OrdersRouter.post(
   '/',
-  passport.authenticate('jwt-user', { session: false }),
+  passport.authenticate('jwt-or-new', { session: false }),
   OrdersController.getOrder
 );
 OrdersRouter.patch(
