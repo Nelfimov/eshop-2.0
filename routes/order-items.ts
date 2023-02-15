@@ -9,5 +9,13 @@ OrderItemsRouter.post(
   passport.authenticate('jwt-user', { session: false }),
   OrderItemsController.addToCart
 );
-// OrderItemsRouter.post('/remove', OrderItemsController.removeFromCart);
-OrderItemsRouter.post('/substract', OrderItemsController.substractFromCart);
+OrderItemsRouter.post(
+  '/remove',
+  passport.authenticate('jwt', { session: false }),
+  OrderItemsController.removeFromCart
+);
+OrderItemsRouter.post(
+  '/substract',
+  passport.authenticate('jwt', { session: false }),
+  OrderItemsController.substractFromCart
+);

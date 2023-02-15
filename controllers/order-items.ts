@@ -111,3 +111,55 @@ export async function substractFromCart(
     next(err);
   }
 }
+
+export async function removeFromCart(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const product = await Product.findById(req.params.id).lean().exec();
+    if (!product) {
+      return res.json({
+        success: false,
+        message: 'No such product with ID found',
+      });
+    }
+
+    const order = await Order.findOne({
+      user: req.user?._id,
+      isOrdered: false,
+    }).exec();
+    if (!order) {
+      return res.json({
+        success: false,
+        message: 'You do not have active order',
+      });
+    }
+
+    const orderItem = await OrderItem.findOne({
+      order: order._id,
+      product: product._id,
+    }).exec();
+
+    if (!orderItem) {
+      return res.json({
+        success: false,
+        message: 'You do not have this item in your order',
+      });
+    }
+
+    await orderItem.remove();
+    const newOrderItems = await OrderItem.find({
+      order: order._id,
+    });
+
+    return res.json({
+      success: true,
+      message: 'Succesfully removed',
+      'order-items': newOrderItems,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
