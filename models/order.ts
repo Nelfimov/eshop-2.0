@@ -7,6 +7,10 @@ const OrderSchema = new Schema<IOrder>(
     isOrdered: { type: Boolean, default: false, required: true },
     payment: { type: Schema.Types.ObjectId, ref: 'Payment' },
     address: { type: Schema.Types.ObjectId, ref: 'Address' },
+    status: {
+      type: String,
+      enum: ['draft', 'processing', 'delivery', 'finished'],
+    },
   },
   {
     timestamps: true,

@@ -13,12 +13,22 @@ export async function getOrder(
   next: NextFunction
 ) {
   try {
-    if (!req.user) throw new Error('User is not authorized');
+    if (!req.user) {
+      return res.json({
+        success: false,
+        message: 'User is not authorized',
+      });
+    }
 
     const order = await getOrCreateOrder(req.user._id.toString());
 
     const user = await User.findById(req.user._id).exec();
-    if (!user) throw new Error('User not found');
+    if (!user) {
+      return res.json({
+        success: false,
+        message: 'User not found',
+      });
+    }
 
     res.json({
       success: true,
@@ -37,9 +47,10 @@ export async function deleteOrder(
 ) {
   try {
     const order = await Order.deleteOne({ _id: req.params.id });
-    order.deletedCount === 1
-      ? res.json({ success: true })
-      : res.json({ success: false });
+    res.json({
+      success: order.acknowledged,
+      deletedCount: order.deletedCount,
+    });
   } catch (err) {
     next(err);
   }
@@ -62,7 +73,7 @@ export async function changeOrder(
         message: 'Order is false',
       });
     }
-    await order?.save();
+    await order.save();
     res.json({
       success: true,
       order,

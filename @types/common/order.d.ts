@@ -6,6 +6,7 @@ export interface Order {
   isOrdered: boolean;
   payment?: Types.ObjectId | Payment;
   address?: Types.ObjectId | Address;
+  status: string;
   createdAt: Date;
   updatedAt: Date;
 }
