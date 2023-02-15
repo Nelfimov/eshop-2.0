@@ -2,8 +2,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import request from 'supertest';
 import app from '../app.js';
 import { startMongoMemory } from '../configs/mongo-memory.js';
-import { Product } from '../models/product.js';
-import { Order } from '../models/order.js';
+import { Product, Order } from '../models/index.js';
 
 const products = [
   {
@@ -53,7 +52,7 @@ describe('/products/:id/add', () => {
       .post(`/products/${product?._id.toString()}/add`)
       .set('Authorization', user.body.token);
     expect(response.body.success).toBeTruthy();
-    const order = await Order.find({ 'user.username': 'user' }).exec();
+    const order = await Order.find({ user: response.body.order.user }).exec();
     expect(order.length).toBe(1);
   });
 
@@ -63,7 +62,7 @@ describe('/products/:id/add', () => {
       `/products/${product?._id.toString()}/add`
     );
     expect(response.body.success).toBeTruthy();
-    const order = await Order.find({ user: response.body.user }).exec();
+    const order = await Order.find({ user: response.body.order.user }).exec();
     expect(order.length).toBe(1);
   });
 });
