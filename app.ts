@@ -21,10 +21,14 @@ app.use(urlencoded({ extended: false }));
 app.use(cors());
 app.use('/statics', express.static(path.join(__dirname, 'statics')));
 
+app.get('/', (req, res) => {
+  res.json({ success: true, message: 'Welcome!' });
+});
 app.use('/auth', router.AuthRouter);
 app.use('/products', router.ProductRouter);
 app.use('/addresses', router.AddressesRouter);
 app.use('/orders', router.OrdersRouter);
+app.use('/payments', router.PaymentsRouter);
 
 app.use((req, res, next) => next(createError(404)));
 // @ts-expect-error: This is unknown error
