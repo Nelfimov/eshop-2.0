@@ -1,5 +1,6 @@
 export interface Product {
   name: string;
+  description: string;
   quantityOnStock: number;
   price: number;
   deliveryPrice?: number;

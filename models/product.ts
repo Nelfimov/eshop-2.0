@@ -4,6 +4,7 @@ import { Product as IProduct } from '../@types/common/product.js';
 const ProductSchema = new Schema<IProduct>(
   {
     name: { type: String, required: true },
+    description: { type: String, required: true },
     quantityOnStock: { type: Number, required: true, default: 1 },
     price: { type: Number, required: true },
     deliveryPrice: { type: Number },
