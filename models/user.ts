@@ -3,7 +3,7 @@ import { User as IUser } from '../@types/common/user.js';
 
 const UserSchema = new Schema<IUser>(
   {
-    username: { type: String, required: true },
+    username: { type: String },
     email: { type: String, required: true },
     password: { type: String, required: true },
     isAdmin: { type: Boolean, default: false },

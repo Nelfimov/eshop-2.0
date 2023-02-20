@@ -5,11 +5,8 @@ import { issueToken } from '../configs/jwt.js';
 
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
-    const {
-      username,
-      email,
-      password,
-    }: { [field: string]: string | undefined } = req.body;
+    const { email, password }: { [field: string]: string | undefined } =
+      req.body;
 
     if (!password) {
       res.json({
@@ -19,18 +16,14 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       return;
     }
 
-    if (!username && !email) {
-      res.json({
+    if (!email) {
+      return res.json({
         success: false,
-        message: 'You need to provide either username or password',
+        message: 'You need to provide email',
       });
-      return;
     }
 
-    const user = await User.findOne({
-      $or: [{ username }, { email }],
-      isAnon: false,
-    }).exec();
+    const user = await User.findOne({ email, isAnon: false }).exec();
     if (!user) {
       res.json({
         success: false,
@@ -41,11 +34,10 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
     const result = bcryptjs.compareSync(password, user.password);
     if (!result) {
-      res.json({
+      return res.json({
         success: false,
         message: 'Passwords do not match',
       });
-      return;
     }
 
     const token = await issueToken(user);
@@ -54,7 +46,6 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       ...token,
     });
   } catch (err) {
-    console.error(err);
     next(err);
   }
 }
@@ -65,69 +56,42 @@ export async function register(
   next: NextFunction
 ) {
   try {
-    const {
-      username,
-      email,
-      password,
-      secret,
-    }: { [field: string]: string | undefined } = req.body;
-
-    if (!username) {
-      res.json({
-        success: false,
-        message: 'Need to provide unique username',
-      });
-      return;
-    }
-
+    const { email, password, secret }: { [field: string]: string | undefined } =
+      req.body;
     if (!password) {
-      res.json({
+      return res.json({
         success: false,
         message: 'Need to provide password',
       });
-      return;
     }
 
     if (!email) {
-      res.json({
+      return res.json({
         success: false,
         message: 'Need to provide unique email',
       });
-      return;
     }
 
-    const userByUsernameOrEmail = await User.exists({
-      $or: [
-        {
-          username: { $regex: username, $options: 'i' },
-        },
-        { email: { $regex: email, $options: 'i' } },
-      ],
+    const userByEmail = await User.exists({
+      email: { $regex: email, $options: 'i' },
     }).exec();
 
-    if (userByUsernameOrEmail) {
-      res.json({
+    if (userByEmail) {
+      return res.json({
         success: false,
         message: 'Username or email already taken',
       });
-      return;
     }
 
     const hashedPassword = bcryptjs.hashSync(
       password,
       parseInt(process.env.SALT as string)
     );
-    let user;
-    if (secret === process.env.ADMIN_SECRET) {
-      user = new User({
-        username,
-        email,
-        password: hashedPassword,
-        isAdmin: true,
-      });
-    } else {
-      user = new User({ username, email, password: hashedPassword });
-    }
+    const user = new User({
+      email,
+      password: hashedPassword,
+      isAdmin: secret === process.env.ADMIN_SECRET,
+    });
     await user.save();
     const token = await issueToken(user);
     res.json({
@@ -135,7 +99,6 @@ export async function register(
       ...token,
     });
   } catch (err) {
-    console.error(err);
     next(err);
   }
 }
