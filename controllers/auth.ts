@@ -9,11 +9,10 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       req.body;
 
     if (!password) {
-      res.json({
+      return res.json({
         success: false,
         message: 'You need to provide password',
       });
-      return;
     }
 
     if (!email) {
@@ -25,11 +24,10 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
     const user = await User.findOne({ email, isAnon: false }).exec();
     if (!user) {
-      res.json({
+      return res.json({
         success: false,
         message: 'No such user found',
       });
-      return;
     }
 
     const result = bcryptjs.compareSync(password, user.password);
@@ -44,6 +42,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     res.json({
       success: true,
       ...token,
+      user: user.email,
     });
   } catch (err) {
     next(err);
@@ -97,6 +96,7 @@ export async function register(
     res.json({
       success: true,
       ...token,
+      user: user.email,
     });
   } catch (err) {
     next(err);
