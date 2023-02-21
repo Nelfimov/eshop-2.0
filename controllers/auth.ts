@@ -42,7 +42,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     res.json({
       success: true,
       ...token,
-      user: user.email,
+      user: [user.username, user.email],
     });
   } catch (err) {
     next(err);
@@ -96,7 +96,7 @@ export async function register(
     res.json({
       success: true,
       ...token,
-      user: user.email,
+      user: [user.username, user.email],
     });
   } catch (err) {
     next(err);
