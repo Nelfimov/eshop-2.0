@@ -39,11 +39,16 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     }
 
     const token = await issueToken(user);
-    res.json({
-      success: true,
-      ...token,
-      user: [user.username, user.email],
-    });
+    res
+      .json({
+        success: true,
+        user: [user.username, user.email],
+      })
+      .cookie('token', token.token, {
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        sameSite: true,
+      });
   } catch (err) {
     next(err);
   }
@@ -93,11 +98,16 @@ export async function register(
     });
     await user.save();
     const token = await issueToken(user);
-    res.json({
-      success: true,
-      ...token,
-      user: [user.username, user.email],
-    });
+    res
+      .json({
+        success: true,
+        user: [user.username, user.email],
+      })
+      .cookie('token', token.token, {
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        sameSite: true,
+      });
   } catch (err) {
     next(err);
   }

@@ -1,5 +1,6 @@
 import createError from 'http-errors';
 import express, { json, Response, urlencoded } from 'express';
+import cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -16,6 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(json());
+app.use(cookieParser());
 app.use(passport.initialize());
 app.use(urlencoded({ extended: false }));
 app.use(cors());
