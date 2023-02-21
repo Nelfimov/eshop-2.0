@@ -42,7 +42,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     res.cookie('token', token.token, {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
-      sameSite: true,
+      sameSite: 'lax',
     });
     res.json({
       success: true,
@@ -97,10 +97,10 @@ export async function register(
     });
     await user.save();
     const token = await issueToken(user);
-    res.cookie('token', token.token, {
+    res.cookie('token', JSON.stringify(token.token), {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
-      sameSite: true,
+      sameSite: 'lax',
     });
     res.json({
       success: true,
