@@ -1,15 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
+import { Types } from 'mongoose';
 import { Product } from '../models/index.js';
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    const products = await Product.find({}).exec();
+    const ids: Types.ObjectId[] = req.query.ids
+      ? JSON.parse(req.query.ids as string)
+      : null;
+    let products;
+    if (ids) {
+      products = await Product.find({ _id: { $in: ids } }).exec();
+    } else {
+      products = await Product.find({}).exec();
+    }
     res.json({
       success: true,
       products,
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
@@ -22,7 +30,6 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
       product,
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
@@ -35,7 +42,6 @@ export async function create(req: Request, res: Response, next: NextFunction) {
       success: true,
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
@@ -58,7 +64,6 @@ export async function deleteOne(
       message: 'Product not found',
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
@@ -83,7 +88,6 @@ export async function updateOne(
       success: true,
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
