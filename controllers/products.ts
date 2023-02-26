@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import { Types } from 'mongoose';
 import { Product } from '../models/index.js';
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    const ids: Types.ObjectId[] = req.query.ids
+    const ids: string[] = req.query.ids
       ? JSON.parse(req.query.ids as string)
       : null;
     let products;
