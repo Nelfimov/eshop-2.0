@@ -1,6 +1,5 @@
 import { NextFunction, Response, Request } from 'express';
 import { Address, Order, User } from '../models/index.js';
-import { issueToken } from '../configs/index.js';
 import { getOrCreateOrder } from '../helpers/index.js';
 
 /**
@@ -13,16 +12,9 @@ export async function getOrder(
   next: NextFunction
 ) {
   try {
-    if (!req.user) {
-      return res.json({
-        success: false,
-        message: 'User is not authorized',
-      });
-    }
+    const order = await getOrCreateOrder(req.user?.id);
 
-    const order = await getOrCreateOrder(req.user._id.toString());
-
-    const user = await User.findById(req.user._id).exec();
+    const user = await User.findById(req.user?._id).exec();
     if (!user) {
       return res.json({
         success: false,
@@ -32,7 +24,6 @@ export async function getOrder(
 
     res.json({
       success: true,
-      ...issueToken(user),
       order,
     });
   } catch (err) {

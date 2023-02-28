@@ -6,7 +6,7 @@ export const OrderItemsRouter = Router({ mergeParams: true });
 
 OrderItemsRouter.post(
   '/add',
-  passport.authenticate('jwt-or-new', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   OrderItemsController.addToCart
 );
 OrderItemsRouter.post(
