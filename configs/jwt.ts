@@ -17,7 +17,7 @@ export function issueToken(user: HydratedDocument<User>) {
   const signedToken = jwt.sign(payload, secret, { expiresIn });
 
   return {
-    token: `Bearer ${signedToken}`,
+    token: signedToken,
     expires: expiresIn,
   };
 }

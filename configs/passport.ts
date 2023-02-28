@@ -12,11 +12,17 @@ dotenv.config();
 
 const customPassport = passport;
 
+const cookieExtractor = function (req: Request) {
+  let token;
+  if (req && req.cookies) token = req.cookies['token'];
+  return token;
+};
+
 customPassport.use(
   'jwt',
   new Strategy(
     {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: cookieExtractor,
       secretOrKey: process.env.JWT_SECRET,
       passReqToCallback: true,
     },
