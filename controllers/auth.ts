@@ -47,7 +47,11 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     });
     res.json({
       success: true,
-      user: [user.username, user.email],
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
     });
   } catch (err) {
     next(err);
@@ -105,7 +109,11 @@ export async function register(
     });
     res.json({
       success: true,
-      user: [user.username, user.email],
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
     });
   } catch (err) {
     next(err);
@@ -136,7 +144,7 @@ export async function registerAnon(
     });
     res.json({
       success: true,
-      user: user.id,
+      user: { id: user.id },
     });
   } catch (err) {
     next(err);
