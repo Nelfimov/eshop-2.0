@@ -13,7 +13,6 @@ export async function getUserAddresses(
       addresses,
     });
   } catch (err) {
-    console.error(err);
     next(err);
   }
 }
@@ -28,9 +27,10 @@ export async function createNewAddress(
     await address.save();
     res.json({
       success: true,
+      user: req.user?.id,
+      address: address.id,
     });
   } catch (err) {
-    console.error(err);
     next(err);
   }
 }

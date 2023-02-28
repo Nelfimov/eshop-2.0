@@ -72,57 +72,6 @@ class JwtStrategy extends Strategy {
   static JwtVerifier = jwt.verify;
 }
 
-/*
-const OldJwtStrategy = function (
-  this: Strategy | any,
-  options: StrategyOptions,
-  verify: VerifyCallbackWithRequest
-) {
-  Strategy.call(this);
-  this.name = 'jwt';
-
-  this._secretOrKeyProvider = options.secretOrKeyProvider;
-
-  if (options.secretOrKey) {
-    if (this._secretOrKeyProvider) {
-      throw new TypeError(
-        'JwtStrategy has been given both a secretOrKey and a secretOrKeyProvider'
-      );
-    }
-    this._secretOrKeyProvider = function (request, rawJwtToken, done) {
-      done(null, options.secretOrKey);
-    };
-  }
-
-  if (!this._secretOrKeyProvider) {
-    throw new TypeError('JwtStrategy requires a secret or key');
-  }
-
-  this._verify = verify;
-  if (!this._verify) {
-    throw new TypeError('JwtStrategy requires a verify callback');
-  }
-
-  this._jwtFromRequest = options.jwtFromRequest;
-  if (!this._jwtFromRequest) {
-    throw new TypeError(
-      'JwtStrategy requires a function to retrieve jwt from requests (see option jwtFromRequest)'
-    );
-  }
-
-  this._passReqToCallback = options.passReqToCallback;
-  const jsonWebTokenOptions = options.jsonWebTokenOptions || {};
-  this._verifOpts = assign({}, jsonWebTokenOptions, {
-    audience: options.audience,
-    issuer: options.issuer,
-    algorithms: options.algorithms,
-    ignoreExpiration: !!options.ignoreExpiration,
-  });
-};
-
-util.inherits(JwtStrategy, Strategy);
-*/
-
 JwtStrategy.prototype.authenticate = async function (
   req: Request,
   options: any

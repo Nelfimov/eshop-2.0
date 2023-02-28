@@ -9,4 +9,8 @@ AddressesRouter.get(
   passport.authenticate('jwt', { session: false }),
   AddressesController.getUserAddresses
 );
-AddressesRouter.post('/', AddressesController.createNewAddress);
+AddressesRouter.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  AddressesController.createNewAddress
+);
