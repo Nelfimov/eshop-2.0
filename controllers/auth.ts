@@ -51,6 +51,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
         id: user.id,
         username: user.username,
         email: user.email,
+        isAdmin: user.isAdmin,
       },
     });
   } catch (err) {
@@ -113,6 +114,7 @@ export async function register(
         id: user.id,
         username: user.username,
         email: user.email,
+        isAdmin: user.isAdmin,
       },
     });
   } catch (err) {
