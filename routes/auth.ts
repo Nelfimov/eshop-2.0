@@ -7,6 +7,7 @@ export const AuthRouter = Router();
 AuthRouter.post('/login', AuthController.login);
 AuthRouter.post('/register', AuthController.register);
 AuthRouter.post('/register-anon', AuthController.registerAnon);
+AuthRouter.post('/logout', AuthController.logout);
 AuthRouter.get(
   '/protected',
   passport.authenticate('jwt', { session: false }),

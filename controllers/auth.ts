@@ -152,3 +152,14 @@ export async function registerAnon(
     next(err);
   }
 }
+
+export async function logout(req: Request, res: Response, next: NextFunction) {
+  try {
+    res.clearCookie('token', { httpOnly: true });
+    res.json({
+      success: true,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
