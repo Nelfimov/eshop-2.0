@@ -140,7 +140,7 @@ export async function registerAnon(
     await user.save();
     const token = await issueToken(user);
     res.cookie('token', JSON.stringify(token.token), {
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
       sameSite: 'lax',
     });
