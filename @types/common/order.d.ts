@@ -7,7 +7,7 @@ export interface Order {
   payment?: Types.ObjectId | Payment;
   addressShipping?: Types.ObjectId | Address;
   addressBilling?: Types.ObjectId | Address;
-  status: string;
+  status: 'draft' | 'processing' | 'delivery' | 'finished';
   createdAt: Date;
   updatedAt: Date;
 }

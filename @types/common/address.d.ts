@@ -9,6 +9,6 @@ interface Address {
   country: string;
   fullName: string;
   user?: User | Types.ObjectId | undefined;
-  type: string;
+  type: 'billing' | 'shipping';
   email: string;
 }
