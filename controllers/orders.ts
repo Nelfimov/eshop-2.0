@@ -24,7 +24,7 @@ export async function getOrder(
 
     res.json({
       success: true,
-      order: order.id,
+      order,
     });
   } catch (err) {
     next(err);
