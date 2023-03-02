@@ -5,21 +5,21 @@ import { isUserAdmin } from '../middlewares/index.js';
 
 export const OrdersRouter = Router();
 
-OrdersRouter.post(
+OrdersRouter.get(
   '/',
   passport.authenticate('jwt', { session: false }),
   OrdersController.getOrder
+);
+OrdersRouter.patch(
+  '/:id/address',
+  passport.authenticate('jwt', { session: false }),
+  OrdersController.updateAddress
 );
 OrdersRouter.patch(
   '/:id',
   passport.authenticate('jwt', { session: false }),
   isUserAdmin,
   OrdersController.changeOrder
-);
-OrdersRouter.patch(
-  '/:id/address',
-  passport.authenticate('jwt', { session: false }),
-  OrdersController.changeOrderAddress
 );
 OrdersRouter.patch(
   '/:id/finished',

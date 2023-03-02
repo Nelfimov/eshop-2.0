@@ -6,7 +6,8 @@ const OrderSchema = new Schema<IOrder>(
     user: { type: Schema.Types.ObjectId, required: true },
     isOrdered: { type: Boolean, default: false, required: true },
     payment: { type: Schema.Types.ObjectId, ref: 'Payment' },
-    address: { type: Schema.Types.ObjectId, ref: 'Address' },
+    addressBilling: { type: Schema.Types.ObjectId, ref: 'Address' },
+    addressShipping: { type: Schema.Types.ObjectId, ref: 'Address' },
     status: {
       type: String,
       enum: ['draft', 'processing', 'delivery', 'finished'],

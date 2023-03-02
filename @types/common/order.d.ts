@@ -5,7 +5,8 @@ export interface Order {
   user: Types.ObjectId | User;
   isOrdered: boolean;
   payment?: Types.ObjectId | Payment;
-  address?: Types.ObjectId | Address;
+  addressShipping?: Types.ObjectId | Address;
+  addressBilling?: Types.ObjectId | Address;
   status: string;
   createdAt: Date;
   updatedAt: Date;

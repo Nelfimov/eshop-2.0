@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from 'express';
-import { Address, Order, User } from '../models/index.js';
+import { Order, User } from '../models/index.js';
 import { getOrCreateOrder } from '../helpers/index.js';
 
 /**
@@ -77,35 +77,6 @@ export async function changeOrder(
 /**
  * Change order with admin priveleges.
  */
-export async function changeOrderAddress(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    const address = new Address({ ...req.body });
-    await address.save();
-    const order = await Order.findById(req.params.id).exec();
-    if (!order) {
-      return res.json({
-        success: false,
-        message: 'Order is false',
-      });
-    }
-    order.address = address._id;
-    await order.save();
-    res.json({
-      success: true,
-      order,
-    });
-  } catch (err) {
-    next(err);
-  }
-}
-
-/**
- * Change order with admin priveleges.
- */
 export async function changeOrderStatus(
   req: Request,
   res: Response,
@@ -120,6 +91,35 @@ export async function changeOrderStatus(
       });
     }
     order.isOrdered = !order.isOrdered;
+    await order.save();
+    res.json({
+      success: true,
+      order,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateAddress(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const order = await Order.findById(req.params.id).exec();
+    if (!order) {
+      return res.json({
+        success: false,
+        message: 'Order is false',
+      });
+    }
+    if (req.body.shippingAddress) {
+      order.addressShipping = req.body.shippingAddress;
+    }
+    if (req.body.billingAddress) {
+      order.addressBilling = req.body.billingAddress;
+    }
     await order.save();
     res.json({
       success: true,
