@@ -23,7 +23,7 @@ export async function createNewAddress(
   next: NextFunction
 ) {
   try {
-    const address = new Address({ ...req.body });
+    const address = new Address({ ...req.body, user: req.user });
     await address.save();
     res.json({
       success: true,
