@@ -39,8 +39,8 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       });
     }
 
-    const token = await issueToken(user);
-    res.cookie('token', token.token, {
+    const { token } = await issueToken(user);
+    res.cookie('token', token, {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
       sameSite: 'lax',
@@ -102,8 +102,8 @@ export async function register(
       isAdmin: secret === process.env.ADMIN_SECRET,
     });
     await user.save();
-    const token = await issueToken(user);
-    res.cookie('token', JSON.stringify(token.token), {
+    const { token } = issueToken(user);
+    res.cookie('token', token, {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
       sameSite: 'lax',
@@ -133,13 +133,13 @@ export async function registerAnon(
       parseInt(process.env.SALT as string)
     );
     const user = new User({
-      email: `${randomString(10)}@anon.com`,
+      email: `${randomString(5)}@anon.com`,
       password: hashedPassword,
       isAnon: true,
     });
     await user.save();
-    const token = await issueToken(user);
-    res.cookie('token', JSON.stringify(token.token), {
+    const { token } = issueToken(user);
+    res.cookie('token', token, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
       sameSite: 'lax',

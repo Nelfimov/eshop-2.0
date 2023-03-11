@@ -1,21 +1,22 @@
 import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import passport from 'passport';
-import { Strategy, ExtractJwt, VerifiedCallback } from 'passport-jwt';
+import {
+  JwtFromRequestFunction,
+  Strategy,
+  VerifiedCallback,
+} from 'passport-jwt';
 import { User as IUser } from '../@types/common/index.js';
 import { User } from '../models/user.js';
 import * as dotenv from 'dotenv';
 import { HydratedDocument } from 'mongoose';
-import { JwtStrategy } from './passport-strategy.js';
 
 dotenv.config();
 
 const customPassport = passport;
 
-const cookieExtractor = function (req: Request) {
-  let token;
-  if (req && req.cookies) token = req.cookies['token'];
-  return token;
+const cookieExtractor: JwtFromRequestFunction = function (req) {
+  return req && req.cookies ? req.cookies['token'] : null;
 };
 
 customPassport.use(
@@ -44,6 +45,7 @@ customPassport.use(
   )
 );
 
+/*
 customPassport.use(
   'jwt-or-new',
   new JwtStrategy(
@@ -66,5 +68,6 @@ customPassport.use(
     }
   )
 );
+*/
 
 export { customPassport as passport };
