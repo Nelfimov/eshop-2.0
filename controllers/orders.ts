@@ -76,7 +76,7 @@ export async function changeOrder(
 }
 
 /**
- * Change order with admin priveleges.
+ * Change order to `ordered`.
  */
 export async function changeOrderStatus(
   req: Request,
@@ -91,7 +91,7 @@ export async function changeOrderStatus(
         message: 'Order is false',
       });
     }
-    order.isOrdered = !order.isOrdered;
+    order.isOrdered = true;
     await order.save();
     res.json({
       success: true,

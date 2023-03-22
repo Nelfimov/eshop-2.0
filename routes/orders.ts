@@ -32,7 +32,7 @@ OrdersRouter.patch(
   OrdersController.changeOrder
 );
 OrdersRouter.patch(
-  '/:id/finished',
+  '/:id/ordered',
   passport.authenticate('jwt', { session: false }),
   OrdersController.changeOrderStatus
 );
