@@ -16,6 +16,11 @@ OrdersRouter.patch(
   OrdersController.updateAddress
 );
 OrdersRouter.patch(
+  '/:id/items',
+  passport.authenticate('jwt', { session: false }),
+  OrdersController.addItems
+);
+OrdersRouter.patch(
   '/:id/payment',
   passport.authenticate('jwt', { session: false }),
   OrdersController.updatePayment

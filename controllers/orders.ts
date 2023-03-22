@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Response, Request } from 'express';
-import { Order, User } from '../models/index.js';
+import { Order, OrderItem, Product, User } from '../models/index.js';
 import { getOrCreateOrder } from '../helpers/index.js';
 
 /**
@@ -151,6 +152,50 @@ export async function updatePayment(
     res.json({
       success: true,
       order,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function addItems(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    let result = true;
+
+    const cartItems: { id: string; quantity: string }[] = req.body.cartItems;
+    const order = await getOrCreateOrder(req.user!._id.toString());
+
+    for (const item of cartItems) {
+      const product = await Product.findById(item.id).exec();
+      if (!product) {
+        result = false;
+        break;
+      }
+      await new OrderItem({
+        order,
+        product,
+        quantity: item.quantity,
+      }).save();
+    }
+
+    if (!result) {
+      return res.json({
+        success: result,
+        message: 'Something went wrong with items',
+      });
+    }
+
+    const orderItems = await OrderItem.find({ order: order._id })
+      .populate('order')
+      .exec();
+    res.json({
+      success: result,
+      order,
+      orderItems,
     });
   } catch (err) {
     next(err);

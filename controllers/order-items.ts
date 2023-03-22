@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Request, Response } from 'express';
 import { issueToken } from '../configs/jwt.js';
 import { getOrCreateOrder } from '../helpers/index.js';
@@ -52,7 +53,6 @@ export async function addToCart(
       success: true,
       order,
       orderItem,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       ...issueToken(userQuery!),
     });
   } catch (err) {
