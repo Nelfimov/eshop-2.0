@@ -129,3 +129,30 @@ export async function updateAddress(
     next(err);
   }
 }
+
+export async function updatePayment(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    let order = await Order.findById(req.params.id).exec();
+    if (!order) {
+      return res.json({
+        success: false,
+        message: 'Order is false',
+      });
+    }
+    if (req.body.paymentID) {
+      order.payment = req.body.paymentID;
+    }
+    await order.save();
+    order = await Order.findById(req.params.id).populate('payment').exec();
+    res.json({
+      success: true,
+      order,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
