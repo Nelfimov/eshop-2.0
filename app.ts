@@ -20,7 +20,14 @@ app.use(json());
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(urlencoded({ extended: false }));
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+app.use(
+  cors({
+    credentials: true,
+    origin: 'http://localhost:3000',
+    preflightContinue: true,
+    methods: 'GET,POST,PATCH,DELETE,OPTIONS',
+  })
+);
 app.use('/statics', express.static(path.join(__dirname, 'statics')));
 
 app.get('/', (req, res) => {
