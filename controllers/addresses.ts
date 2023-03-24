@@ -7,7 +7,10 @@ export async function getUserAddresses(
   next: NextFunction
 ) {
   try {
-    const addresses = await Address.find({ user: req.user?._id });
+    const addresses = await Address.find({ user: req.user?._id })
+      .sort('createdAt')
+      .lean()
+      .exec();
     res.json({
       success: true,
       addresses,
