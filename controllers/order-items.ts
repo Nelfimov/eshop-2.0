@@ -100,7 +100,7 @@ export async function substractFromCart(
     if (orderItem.quantity > 1) {
       orderItem.quantity -= 1;
     } else {
-      await orderItem.remove();
+      await orderItem.deleteOne();
     }
 
     const newOrderItems = await OrderItem.find({
@@ -154,7 +154,7 @@ export async function removeFromCart(
       });
     }
 
-    await orderItem.remove();
+    await orderItem.deleteOne();
     const newOrderItems = await OrderItem.find({
       order: order._id,
     });

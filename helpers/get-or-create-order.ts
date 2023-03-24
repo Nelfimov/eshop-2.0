@@ -5,7 +5,7 @@ export async function getOrCreateOrder(id: string) {
     user: id,
     isOrdered: false,
   })
-    .populate('addressShipping')
+    .populate('addressShipping addressBilling')
     .exec();
   if (!order) {
     order = new Order({

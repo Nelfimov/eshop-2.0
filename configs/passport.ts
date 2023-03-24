@@ -6,10 +6,8 @@ import {
   Strategy,
   VerifiedCallback,
 } from 'passport-jwt';
-import { User as IUser } from '../@types/common/index.js';
 import { User } from '../models/user.js';
 import * as dotenv from 'dotenv';
-import { HydratedDocument } from 'mongoose';
 
 dotenv.config();
 
@@ -27,20 +25,15 @@ customPassport.use(
       secretOrKey: process.env.JWT_SECRET,
       passReqToCallback: true,
     },
-    (req: Request, payload: JwtPayload, done: VerifiedCallback) => {
-      User.findById(
-        payload.sub,
-        (err: Error, result: HydratedDocument<IUser> | undefined) => {
-          if (err) {
-            return done(err, false);
-          }
-          if (result) {
-            req.user = result;
-            return done(null, result);
-          }
-          done(null, false);
-        }
-      );
+    async (req: Request, payload: JwtPayload, done: VerifiedCallback) => {
+      try {
+        const user = await User.findById(payload.sub).exec();
+        if (!user) return done(null, false);
+        req.user = user;
+        done(null, user);
+      } catch (err) {
+        done(err, false);
+      }
     }
   )
 );
