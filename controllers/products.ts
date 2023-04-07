@@ -47,8 +47,10 @@ export async function create(req: Request, res: Response, next: NextFunction) {
 
     const product = new Product<IProduct>({
       ...req.body,
-      titleImage: `http://localhost:3000/${titleImagePath}`,
-      subImages: otherImagesPaths,
+      titleImage: `${process.env.HOST_URL}${titleImagePath}`,
+      subImages: [
+        ...otherImagesPaths.map((path) => `${process.env.HOST_URL}${path}`),
+      ],
     });
     await product.save();
     res.json({

@@ -23,7 +23,7 @@ app.use(urlencoded({ extended: false }));
 app.use(
   cors({
     credentials: true,
-    origin: 'http://localhost:3000',
+    origin: process.env.CLIENT_URL,
     preflightContinue: true,
     methods: 'GET,POST,PATCH,DELETE,OPTIONS',
   })
