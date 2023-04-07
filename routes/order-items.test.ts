@@ -116,7 +116,6 @@ describe('/products/:id/remove', () => {
     const response = await request(app)
       .post(`/products/${product?._id.toString()}/remove`)
       .set('Authorization', addToCart.body.token);
-    console.log(response.error);
     expect(response.body.success).toBeTruthy();
     const order = await Order.find({ user: addToCart.body.order.user }).exec();
     expect(order.length).toBe(1);
