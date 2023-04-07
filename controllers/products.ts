@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Product } from '../models/index.js';
+import { Product as IProduct } from '../@types/common/product.js';
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
@@ -35,10 +36,24 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
 
 export async function create(req: Request, res: Response, next: NextFunction) {
   try {
-    const product = new Product({ ...req.body });
+    const files = req.files as {
+      [fieldname: string]: Express.Multer.File[];
+    };
+
+    const titleImagePath = files['titleImage'][0].path.replace(/\\/g, '/');
+    const otherImagesPaths = files['otherImages'].map((file) =>
+      file.path.replace(/\\/g, '/')
+    );
+
+    const product = new Product<IProduct>({
+      ...req.body,
+      titleImage: `http://localhost:3000/${titleImagePath}`,
+      subImages: otherImagesPaths,
+    });
     await product.save();
     res.json({
       success: true,
+      product,
     });
   } catch (err) {
     next(err);
