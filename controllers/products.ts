@@ -36,9 +36,7 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
 
 export async function create(req: Request, res: Response, next: NextFunction) {
   try {
-    const files = req.files as {
-      [fieldname: string]: Express.Multer.File[];
-    };
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
     const titleImagePath = files['titleImage'][0].path.replace(/\\/g, '/');
     const otherImagesPaths = files['otherImages'].map((file) =>
