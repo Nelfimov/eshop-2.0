@@ -45,7 +45,7 @@ export async function changeOrderStatus(
         success: false,
         message: 'User is unidentified',
       });
-    if (!user._id.equals(order.user)) {
+    if (!user._id.equals(order.user.toString())) {
       return res.json({
         success: false,
         message: 'You are not the user of this order',
