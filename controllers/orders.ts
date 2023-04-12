@@ -3,18 +3,12 @@ import { NextFunction, Response, Request } from 'express';
 import { Order, OrderItem, Product, User } from '../models/index.js';
 import { getOrCreateOrder } from '../helpers/index.js';
 
-/**
- * Get `Order` with `isOrdered = false` for current user.
- * If not present or user is not authorized, create new order.
- */
 export async function getOrder(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const order = await getOrCreateOrder(req.user?.id);
-
     const user = await User.findById(req.user?._id).exec();
     if (!user) {
       return res.json({
@@ -22,7 +16,7 @@ export async function getOrder(
         message: 'User not found',
       });
     }
-
+    const order = await getOrCreateOrder(user._id.toString());
     res.json({
       success: true,
       order,
