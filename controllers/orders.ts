@@ -26,52 +26,6 @@ export async function getOrder(
   }
 }
 
-export async function deleteOrder(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    const order = await Order.deleteOne({ _id: req.params.id });
-    res.json({
-      success: order.acknowledged,
-      deletedCount: order.deletedCount,
-    });
-  } catch (err) {
-    next(err);
-  }
-}
-
-/**
- * Change order with admin priveleges.
- */
-export async function changeOrder(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    let order = await Order.findById(req.params.id).exec();
-    order = { ...order, ...req.body };
-    if (!order) {
-      return res.json({
-        success: false,
-        message: 'Order is false',
-      });
-    }
-    await order.save();
-    res.json({
-      success: true,
-      order,
-    });
-  } catch (err) {
-    next(err);
-  }
-}
-
-/**
- * Change order to `ordered`.
- */
 export async function changeOrderStatus(
   req: Request,
   res: Response,
@@ -85,6 +39,19 @@ export async function changeOrderStatus(
         message: 'Order is false',
       });
     }
+    const user = req.user;
+    if (!user)
+      return res.json({
+        success: false,
+        message: 'User is unidentified',
+      });
+    if (!user._id.equals(order.user)) {
+      return res.json({
+        success: false,
+        message: 'You are not the user of this order',
+      });
+    }
+
     order.isOrdered = true;
     await order.save();
     res.json({
