@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Response, Request } from 'express';
-import { Order, OrderItem, Product, User } from '../models/index.js';
+import { Order, OrderItem, Product } from '../models/index.js';
 import { getOrCreateOrder } from '../helpers/index.js';
 
 export async function getOrder(
@@ -9,14 +9,13 @@ export async function getOrder(
   next: NextFunction
 ) {
   try {
-    const user = await User.findById(req.user?._id).exec();
-    if (!user) {
+    if (!req.user) {
       return res.json({
         success: false,
         message: 'User not found',
       });
     }
-    const order = await getOrCreateOrder(user._id.toString());
+    const order = await getOrCreateOrder(req.user._id.toString());
     res.json({
       success: true,
       order,

@@ -1,17 +1,8 @@
 import { Router } from 'express';
 import { passport } from '../configs/index.js';
 import { OrdersController } from '../controllers/index.js';
-import { isUserAdmin } from '../middlewares/index.js';
-import { AdminOrderRouter } from './order-admin.js';
 
 export const OrdersRouter = Router();
-
-OrdersRouter.use(
-  '/admin',
-  passport.authenticate('jwt', { session: false }),
-  isUserAdmin,
-  AdminOrderRouter
-);
 
 OrdersRouter.get(
   '/',

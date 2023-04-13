@@ -9,6 +9,8 @@ import { HttpException } from './@types/common/index.js';
 import { passport } from './configs/index.js';
 import * as router from './routes/index.js';
 import logger from 'morgan';
+import { AdminRouter } from './routes/admin/index.js';
+import { isUserAdmin } from './middlewares/is-user-admin.js';
 
 dotenv.config();
 
@@ -38,6 +40,7 @@ app.use('/products', router.ProductRouter);
 app.use('/addresses', router.AddressesRouter);
 app.use('/orders', router.OrdersRouter);
 app.use('/payments', router.PaymentsRouter);
+app.use('/admin', isUserAdmin, AdminRouter);
 
 app.use((req, res, next) => next(createError(404)));
 // @ts-expect-error: This is unknown error

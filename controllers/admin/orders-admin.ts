@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { Order } from '../models/index.js';
+import { Order } from '../../models/index.js';
 
 export async function getAllOrdersAdmin(
   req: Request,
