@@ -6,8 +6,8 @@
   "main": "index.js",
   "exports": "./dist",
   "scripts": {
-    "start": "ts-node-esm ./bin/www.ts",
-    "watch": "nodemon --watch './**/*.ts' --exec 'node --loader ts-node/esm' ./bin/www.ts",
+    "start": "ts-node ./bin/www.ts",
+    "watch": "nodemon ./bin/www.ts",
     "test": "NODE_OPTIONS=--experimental-vm-modules vitest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules vitest --watch",
     "coverage": "NODE_OPTIONS=--experimental-vm-modules vitest run --coverage",

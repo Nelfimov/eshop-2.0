@@ -1,1 +1,1 @@
-export * from './orders-admin.js';
+export * from './orders.js';

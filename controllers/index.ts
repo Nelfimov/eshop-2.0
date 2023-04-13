@@ -4,4 +4,4 @@ export * as AddressesController from './addresses.js';
 export * as OrdersController from './orders.js';
 export * as OrderItemsController from './order-items.js';
 export * as PaymentsController from './payments.js';
-export * as OrderAdminController from './admin/orders-admin.js';
+export * as AdminController from './admin/index.js';
